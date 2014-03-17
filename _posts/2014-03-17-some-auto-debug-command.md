@@ -265,4 +265,3 @@ tags: "autotest"
     kvm_append="-device pci-assign,host=$sriov_bus_brief,id=vfnet1 -vnc :3 -usb -device usb-tablet"
     start_kvm
 
-3. others 
