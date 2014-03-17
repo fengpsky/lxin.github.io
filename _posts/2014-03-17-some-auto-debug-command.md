@@ -137,6 +137,7 @@ tags: linux auto test
     start_kvm
 
 2.sriov测试自动化
+
     beaker_eth=`ip addr show |grep 10.66 |awk '{print $NF}'`
     mac_addr=""
     gip_addr=""
@@ -264,4 +265,4 @@ tags: linux auto test
     kvm_append="-device pci-assign,host=$sriov_bus_brief,id=vfnet1 -vnc :3 -usb -device usb-tablet"
     start_kvm
 
-3. ...
+3. others 
