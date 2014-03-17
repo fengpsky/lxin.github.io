@@ -13,11 +13,11 @@ paginate : 15
 # so be sure to set them if your theme uses them.
 #
 title : "Home"
-tagline : This is a blog just for fun.
+tagline : This is a blog just for share.
 author :
-  name : Jijin Huang
-  email : jijin.huang2012@gmail.com
-  github : jijin
+  name : Xin Long
+  email : lxin@gmail.com
+  github : lxin
   twitter : none
   feedburner : none
 
@@ -29,7 +29,7 @@ author :
 # Else if you are pushing to username.github.com, replace with your username.
 # Finally if you are pushing to a GitHub project page, include the project name at the end.
 #
-production_url : http://jijin.github.com
+production_url : http://lxin.org
 deploy: ""
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
@@ -85,7 +85,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : jijinblog
+      short_name : lxin
     livefyre :
       site_id : 123
     intensedebate :
