@@ -3,7 +3,7 @@ layout: post
 title: "一些常用的自动化调试的命令"
 category: linux tool
 excerpt: "对于开发测试内核，挺实用的" 
-tags: "linux auto test"
+tags: "autotest"
 --- 
 {% include JB/setup %}
 

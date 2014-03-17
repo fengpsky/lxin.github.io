@@ -3,7 +3,7 @@ layout: post
 title: "写的几个有用的module"
 category: linux tool
 excerpt: "探测代码执行路径，调用网卡接口..."
-tags: "linux auto test" 
+tags: "autotest" 
 --- 
 {% include JB/setup %}
 
