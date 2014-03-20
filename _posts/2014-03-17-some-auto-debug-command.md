@@ -22,11 +22,14 @@ tags: "autotest"
     }
     sys_init()
     {
-    	test -f /etc/yum.repos.d/beaker-tasks.repo && rm -f /etc/yum.repos.d/beaker-tasks.repo
-            rpm -qa |grep qemu-kvm >/dev/null || yum -y install qemu-kvm >/dev/null
-            rpm -qa |grep tcpdump >/dev/null || yum -y install tcpdump >/dev/null
-            test -f /root/$img_name || wget http://10.66.13.12/sys/$img_name -O /root/$img_name
-    	return 0
+        test -f /etc/yum.repos.d/beaker-tasks.repo && rm -f /etc/yum.repos.d/beaker-tasks.repo
+        rpm -qa |grep qemu-kvm >/dev/null || yum -y install qemu-kvm >/dev/null
+        rpm -qa |grep tcpdump >/dev/null || yum -y install tcpdump >/dev/null
+        rpm -qa |grep net-tools >/dev/null || yum -y install net-tools >/dev/null
+        rpm -qa |grep bridge-utils >/dev/null || yum -y install bridge-utils >/dev/null
+        rpm -qa |grep psmisc >/dev/null || yum -y install psmisc >/dev/null
+        test -f /root/$img_name || wget http://10.66.13.12/sys/$img_name -O /root/$img_name
+        return 0
     }
     get_mac()
     {
