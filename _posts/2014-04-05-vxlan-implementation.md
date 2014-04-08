@@ -94,10 +94,13 @@ net_device的private成员，即vxlan设备的私有信息
 
 
 ### 初始化
+
 #### 注册模块
+
 ##### vxlan_init_module(),drivers/net/vxlan.c, 也是比较清晰的几行代码.
 
 1. vxlan_wq = alloc_workqueue("vxlan", 0, 0);申请一个工作队列，后面会说到它的作用. vxlan_wq是global的
+
 2. rc = register_pernet_subsys(&vxlan_net_ops);注册一个每名字空间的操作
 
         static struct pernet_operations vxlan_net_ops = {
@@ -107,11 +110,15 @@ net_device的private成员，即vxlan设备的私有信息
         };
 
 3. rc = register_netdevice_notifier(&vxlan_notifier_block); 网络通知链
+
 4. rc = rtnl_link_register(&vxlan_link_ops);rtnl框架注册link操作,见rtnl框架分析
+
 5. 其中，在vxlan_init_net()中，获取一块空间，　用来存放一个pernet的vxlan_net,　并进行初始化。
 
 #### 创建
+
 ##### vxlan_newlink()中完成
+
 1. 这是一个rtnl框架注册过的函数，　因此rtnl执行到这的时候net_device己经创建，并且己调用相应的setup()函数设置过,见rtnl_netlink分析.
 
 vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个工作队列
@@ -166,8 +173,11 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
 5.注册net_device,同时在register_netdevice时利用ndo_init  queue_work(vxlan_wq, &vxlan->sock_work);触发vxlan_sock_work(). 此时就能用ifconfig 看到设备了,并再添加进行vxlan_net中。
 
 #### 创建vxlan_socket
+
 ##### 在vxlan_sock_work()中完成
+
 1. vxlan_sock_add(),调用vxlan_socket_create(),如果失败，就用vxlan_find_sock()在pernet中去根据port去找
+
 2. 在,vxlan_socket_create中,先申请一个vs. 再创建一个sock
 
         if (ipv6)
@@ -188,6 +198,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
                          sizeof(vxlan_addr));
 
     上面才回到通用创建的接口上。
+
 3. 还有一个重要的操作，就是vs->rcv = rcv，设置接收函数.当然先调用函数调用在下面设置：
 
         udp_sk(sk)->encap_type = 1;
@@ -197,9 +208,13 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
 
 
 ### 打开
+
 ##### 既然是虚拟网络设置，就按个这个框架来说明，ifconfig vxlan* up, 调用vxlan_open()，做了两件事情
+
 1. queue_work(vxlan_wq, &vxlan->igmp_join);唤醒另一个工作队列
+
 2. 还有一个定时器，后面再做深入
+
 3. vxlan_igmp_join()中，主要还是调用通用接口来设置vxlan_sock加入mgroup.
 
         struct sock *sk = vs->sock->sk;
@@ -283,7 +298,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
 
     这些代码不用说了，　就是扩展完之后，进行vxlan头部，　和udp头部的填充的,
 
-6.再接iptunnel_xmit函数完成发送，　这个函数是ip_tunnel添加ip头部并发送的必调函数。见ip_tunnel框架的分析.
+6. 再接iptunnel_xmit函数完成发送，　这个函数是ip_tunnel添加ip头部并发送的必调函数。见ip_tunnel框架的分析.
 
     另外在vxlan整个代码处理过程中，虽说它是个tunnel，　但并没有套用用ip_tunnel这个框架，不明白为什么加载时还要依赖ip_tunnel这个模块
 
