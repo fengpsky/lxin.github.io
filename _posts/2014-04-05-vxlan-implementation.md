@@ -136,7 +136,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
         INIT_WORK(&vxlan->igmp_leave, vxlan_igmp_leave);
         INIT_WORK(&vxlan->sock_work, vxlan_sock_work);
 
-最后面的这个工作队列会在netlink的时候触发(ndo_init).在它里面会创建传说中的vxlan_sock
+    最后面的这个工作队列会在netlink的时候触发(ndo_init).在它里面会创建传说中的vxlan_sock
 
 2. 接着将其private还原成struct vxlan_dev,进行初始化, 如：
 
@@ -175,7 +175,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
         else
                 sock = create_v4_sock(net, port);
 
-相信你会看个这个很水的sock,连创建函数都是定制的, create_v4_sock:
+    相信你会看个这个很水的sock,连创建函数都是定制的, create_v4_sock:
 
         struct sockaddr_in vxlan_addr = {
                 .sin_family = AF_INET,
@@ -187,13 +187,13 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
         rc = kernel_bind(sock, (struct sockaddr *) &vxlan_addr,
                          sizeof(vxlan_addr));
 
-上面才回到通用创建的接口上。
+    上面才回到通用创建的接口上。
 3. 还有一个重要的操作，就是vs->rcv = rcv，设置接收函数.当然先调用函数调用在下面设置：
 
         udp_sk(sk)->encap_type = 1;
         udp_sk(sk)->encap_rcv = vxlan_udp_encap_recv;
 
-对于这个函数，会在接收时重点说。
+    对于这个函数，会在接收时重点说。
 
 
 ### 打开
@@ -215,9 +215,13 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
 
 
 ### 发送
+
 ##### ndo_start_xmit函数是vxlan_xmit, 自然由它完成发送,此时的发是一个完整的ether包。
+
 1. f = vxlan_find_mac(vxlan, eth->h_dest); 先去fdb表中找vxlan_fdb转发项,相当于协议栈中的dst_entry, 当然是通过mac地址来找的
+
 2. 如果没有找着，一开始还没学习通常都会这样，就会执行f = vxlan_find_mac(vxlan, all_zeros_mac); all_zeros_mac对应的那个项就是我们一开始添加的那个，所以应该会有期望结果返回，而返回的结中的目的地址就是添加时的参数里的那个多播地址，　就用在这里了。
+
 3. 当然找着的转发项可能存在多个目的地址，因此：
 
         list_for_each_entry_rcu(rdst, &f->remotes, list) {
@@ -244,7 +248,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
 
         rt = ip_route_output_key(dev_net(dev), &fl4);
 
-这便是构建flowi,完成路由的查找，　再往后的发送就是vxlan_xmit_skb了。
+    这便是构建flowi,完成路由的查找，　再往后的发送就是vxlan_xmit_skb了。
 
 5. 在这个函数中,非常重要的一步:
 
@@ -255,7 +259,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
         /* Need space for new headers (invalidates iph ptr) */
         err = skb_cow_head(skb, min_headroom);
 
-skb_cow_head是用来拷贝和扩展头部空间的,这个函数有点麻烦，就不分析了.
+    skb_cow_head是用来拷贝和扩展头部空间的,这个函数有点麻烦，就不分析了.
 
         vxh = (struct vxlanhdr *) __skb_push(skb, sizeof(vxh));
         vxh->vx_flags = htonl(VXLAN_FLAGS);
@@ -277,13 +281,14 @@ skb_cow_head是用来拷贝和扩展头部空间的,这个函数有点麻烦，�
 
         skb_set_owner_w(skb, vs->sock->sk);
 
-这些代码不用说了，　就是扩展完之后，进行vxlan头部，　和udp头部的填充的,
+    这些代码不用说了，　就是扩展完之后，进行vxlan头部，　和udp头部的填充的,
 
 6.再接iptunnel_xmit函数完成发送，　这个函数是ip_tunnel添加ip头部并发送的必调函数。见ip_tunnel框架的分析.
 
-另外在vxlan整个代码处理过程中，虽说它是个tunnel，　但并没有套用用ip_tunnel这个框架，不明白为什么加载时还要依赖ip_tunnel这个模块
+    另外在vxlan整个代码处理过程中，虽说它是个tunnel，　但并没有套用用ip_tunnel这个框架，不明白为什么加载时还要依赖ip_tunnel这个模块
 
 ### 接收
+
 ##### 上面提到了vs对应的udp_sock中的encap_rcv = vxlan_udp_encap_recv，　则在接收于会交给这个接口，　默认你是了解udp_rcv的。
 
 1. 此时到的数据是一个ether包+vxlan头部,因此首先获取vxh头，然后再利用ip_tunnel的另一个接口移动头部指针到正确位置:
@@ -305,7 +310,7 @@ skb_cow_head是用来拷贝和扩展头部空间的,这个函数有点麻烦，�
             vxlan_snoop(skb->dev, &saddr, eth_hdr(skb)->h_source))
                 goto drop;
 
-vxlan_snoop重要的一步，是fdb项的学习,它会把此次通信的包以mac为索引添加进fdb表.当然对于这种表，有添加就得有清理，类似于邻居表或路由表，还记得初始化那会一个定时器吗，没有讲，它的作用就是来根据时间做表的清理工作的。
+    vxlan_snoop重要的一步，是fdb项的学习,它会把此次通信的包以mac为索引添加进fdb表.当然对于这种表，有添加就得有清理，类似于邻居表或路由表，还记得初始化那会一个定时器吗，没有讲，它的作用就是来根据时间做表的清理工作的。
 
 3. 到此，就剩下把这个完整的ether包上交了, netif_rx(),好经典好古老的一个接口，相信你还记得它。
 
