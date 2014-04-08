@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <title>rtnetlink框架</title>
+    
+    <meta name="author" content="Xin Long">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/css/syntax.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/css/style_logo.css" rel="stylesheet" type="text/css" media="all">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="Atom feed">
+    <script type="text/javascript" src="/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.flexslider.js"></script>
+    
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/assets/images/linux.ico">
+    <!-- Update these with your own images
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+    
+  </head>
+
+  <body style="background: #333 url(/assets/images/bg.jpg) repeat top left;">
+    <!--
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@;;;;;;;;@@@@@@@@@@@;;;;;;;;@@@@@@@@@@@;;;;;;;;@@@@@@@@@@@@@;;;;;;;;@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;;;;;;;;;;;;;;;;;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;;;;;;;;;;;;;;;;;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;;;;;;;;;;;;;;;;;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@;;;;@@@@@@@@@@@@@@@@@;;;;@@@@@@@@
+    @@@@@;;;;@@@@@@@@@@@@@@@;;;;@@@@@@@@@@@;;;;;@@@@@@@@@@@@@@@@;;;;;@@@@@@@@@
+    @@@;;;;;;;;@@@@@@@@@@@;;;;;;;;@@@@;;;;;;;@@@@@@@@@@@@@@;;;;;;;@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    -->
+    <!--[if lt IE 8]>
+	<div style='border:1px solid #F7941D;background:#FEEFDA;text-align:center;clear:both;height:75px;position:relative;'>
+		<div style='position:absolute;right:3px;top:3px;font-family:courier new;font-weight:bold;'>
+			<a href='#' onclick='javascript:this.parentNode.parentNode.style.display="none";return false;'>
+				<img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border:none;' alt='Close this notice'/>
+			</a>
+		</div>
+		<div style='width:640px;margin:0 auto;text-align:left;padding:0;overflow:hidden;color:black;'>
+			<div style='width:75px;float:left;'>
+				<img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='Warning!'/>
+			</div>
+			<div style='width:275px;float:left;font-family:Arial,sans-serif;'>
+				<div style='font-size:14px;font-weight:bold;margin-top:12px;'>You are using an outdated browser</div>
+				<div style='font-size:12px;margin-top:6px;line-height:12px;'>
+					For a better experience using this site, please upgrade to a modern web browser.
+				</div>
+			</div>
+			<div style='width:75px;float:left;'>
+				<a href='http://www.firefox.com' target='_blank'>
+					<img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' style='border:none;' alt='Get Firefox 3.5'/>
+				</a>
+			</div>
+			<div style='width:75px;float:left;'>
+				<a href='http://www.browserforthebetter.com/download.html' target='_blank'>
+					<img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' style='border:none;' alt='Get IE 8'/>
+				</a>
+			</div>
+			<div style='width:73px;float:left;'>
+				<a href='http://www.apple.com/safari/download/' target='_blank'>
+					<img src='http://www.ie6nomore.com/files/theme/ie6nomore-safari.jpg' style='border:none;' alt='Get Safari 4'/>
+				</a>
+			</div>
+			<div style='float:left;'>
+				<a href='http://www.google.com/chrome' target='_blank'>
+					<img src='http://www.ie6nomore.com/files/theme/ie6nomore-chrome.jpg' style='border:none;' alt='Get Google Chrome'/>
+				</a>
+			</div>
+		</div>
+	</div>
+<![endif]-->
+
+
+    <div class="navbar" id="top-navbar">
+      <div class="navbar-inner" style="">
+        <div class="container">
+          <a class="brand" href="/">Xin Long</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+  
+    
+    	
+    	<li><a href="/pages/pages.html">页面</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/pages/message.html">留言</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/pages/about.html">关于</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/pages/tags.html">标签</a></li>
+    	
+    
+  
+    
+    	
+    	<li><a href="/pages/picture.html">相册</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages/categories.html">分类</a></li>
+    	
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages/tools.html">Wiki</a></li>
+    	
+    
+  
+    
+  
+    
+  
+    
+  
+    
+    	
+    	<li><a href="/pages/archive.html">归档</a></li>
+    	
+    
+  
+    
+  
+    
+  
+
+
+
+          </ul>
+          <ul class="nav subscription pull-right" data-subscription="rss">
+            <li>
+              <a href="/atom.xml" rel="nofollow" title="subscribe via RSS">RSS</a>
+            </li>
+          </ul>
+          <form class="navbar-search pull-right" method="get" action="http://www.google.com/search" target="google_window">
+            <label for="g_search" class="hidden"></label>
+            <input id="g_search" type="text" class="search-query" placeholder="Search..." name="q" />
+            <input type="submit" name=”btnG” style="display:none" id="searchsubmit" value="Search" />
+            <input type="hidden" name="ie" value="UTF-8" />
+            <input type="hidden" name="oe" value="UTF-8" />
+            <input type="hidden" name="hl" value="zh-CN" />
+            <input type="hidden" name="domains" value="http://lxin.org" />
+            <input type="hidden" name="sitesearch" value="http://lxin.org" />
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div id="main-content" class="content">
+        
+<div class="page-header">
+    <h1>rtnetlink框架 <small><!--Supporting tagline--></small></h1>
+</div>
+
+<div class="row">
+  <div id="article_indent" class="span9 pull-left">
+    <div class="span3 article_published">发表于
+      <span class="date">04 April 2014</span>
+      <div class="article_gplus"><div class="g-plusone" data-size="small" data-annotation="none"></div></div>
+    </div>
+    <div class="clear"></div>
+    
+      
+<h3 id="section">几个关键的结构体</h3>
+
+<h4 id="strct-rtnllinkops">strct rtnl_link_ops</h4>
+
+<p>include/net/rtnetlink.h中</p>
+
+<p>描述不同net_device的link操作，如new, dump, set等,因些一个设备想通过rtnetfilter配置就需要在这个框架中注册一项,如vxlan:</p>
+
+<pre><code>static struct rtnl_link_ops vxlan_link_ops __read_mostly = {
+        .kind           = "vxlan",
+        .maxtype        = IFLA_VXLAN_MAX,
+        .policy         = vxlan_policy,
+        .priv_size      = sizeof(struct vxlan_dev),
+        .setup          = vxlan_setup,
+        .validate       = vxlan_validate,
+        .newlink        = vxlan_newlink,
+        .dellink        = vxlan_dellink,
+        .get_size       = vxlan_get_size,
+        .fill_info      = vxlan_fill_info,
+};
+</code></pre>
+
+<p>在其初始化时,rc = rtnl_link_register(&amp;vxlan_link_ops);算是一种对于不同link的扩展.这个函数会在static LIST_HEAD(link_ops)中添加一项, 当然link_ops也是global的</p>
+
+<h4 id="rtnllink">rtnl_link</h4>
+
+<p>net/core/rtnetlink.c中</p>
+
+<pre><code>struct rtnl_link {
+        rtnl_doit_func          doit;
+        rtnl_dumpit_func        dumpit;
+        rtnl_calcit_func        calcit;
+};
+</code></pre>
+
+<p>描述真实操作的函数，构建在rtnl_msg_handlers中，又一个global变量. 可通过rtnl_register()进行注册.</p>
+
+<pre><code>void rtnl_register(int protocol, int msgtype,
+                   rtnl_doit_func doit, rtnl_dumpit_func dumpit,
+                   rtnl_calcit_func calcit)
+</code></pre>
+
+<p>如果有想通过rtnetfilter进行配置的操作可通过它来进行注册.可能会问到它与link_ops的关系。　事实上rtnl_register注册的link操作会调用link_ops这个VT进行操作.似乎刚注册进rtnl框架中的rtnl_link又变成了一个新框架给link_ops用。没办法，内核里面从来都是框架里面套框架 。rtnl自身在初始化时就通过这个接口添加了一堆重要的接口。rtnetlink_init()</p>
+
+<h3 id="section-1">初始化</h3>
+
+<p>rtnetlink_init(), net/core/rtnetlink.c</p>
+
+<p>最清晰的几行代码.</p>
+
+<ol>
+  <li>
+    <p>register_pernet_subsys(&amp;rtnetlink_net_ops)，网络名字空间框架的操作，另一篇中会提到，只要知道在创建名字空间时, init会被调用，删除时exit会被调用.</p>
+
+    <pre><code> static struct pernet_operations rtnetlink_net_ops = {
+         .init = rtnetlink_net_init,
+         .exit = rtnetlink_net_exit,
+ };
+</code></pre>
+
+    <p>而在rtnetlink_net_init()中　sk = netlink_kernel_create(net, NETLINK_ROUTE, &amp;cfg);　就被创建，　接netfiler框架分析, 还是需要提下rtnetlink_rcv()会在些被设置rcv函数，因为下面会说到。</p>
+  </li>
+  <li>
+    <p>register_netdevice_notifier(&amp;rtnetlink_dev_notifier); 网络通知链接框架的操作，　不用多说。</p>
+  </li>
+  <li>
+    <p>rtnl_register(…), 下来是一堆的这样的函数，上面也已经提到过其作用。</p>
+  </li>
+</ol>
+
+<h3 id="section-2">接收</h3>
+
+<p>rtnetlink_rcv-&gt;netlink_rcv_skb-&gt;rtnetlink_rcv_msg</p>
+
+<p>在rtnetlink_rcv_msg()中，分两类：</p>
+
+<ol>
+  <li>
+    <p>为dump操作:</p>
+
+    <pre><code> dumpit = rtnl_get_dumpit(family, type);
+ if (dumpit == NULL)
+         return -EOPNOTSUPP;
+ calcit = rtnl_get_calcit(family, type);
+ if (calcit)
+         min_dump_alloc = calcit(skb, nlh);
+
+ __rtnl_unlock();
+ rtnl = net-&gt;rtnl;
+ {
+         struct netlink_dump_control c = {
+                 .dump           = dumpit,
+                 .min_dump_alloc = min_dump_alloc,
+         };
+         err = netlink_dump_start(rtnl, skb, nlh, &amp;c);
+ }
+</code></pre>
+
+    <p>会先后从rtnl_msg_handlers中取dumpit接口，　和calcit接口，　后者拿到后会直接调用计算需要的空间大小，再组合传入netlink_dump_start()中</p>
+  </li>
+  <li>
+    <p>为do操作:</p>
+
+    <pre><code> doit = rtnl_get_doit(family, type);
+ if (doit == NULL)
+         return -EOPNOTSUPP;
+
+ return doit(skb, nlh);
+</code></pre>
+
+    <p>获取后直接执行</p>
+  </li>
+  <li>
+    <p>在netlink_dump_start()中</p>
+
+    <pre><code> sk = netlink_lookup(sock_net(ssk), ssk-&gt;sk_protocol, NETLINK_CB(skb).portid);
+ ...
+ cb = &amp;nlk-&gt;cb;
+ memset(cb, 0, sizeof(cb));
+ cb-&gt;dump = control-&gt;dump;
+ cb-&gt;done = control-&gt;done;
+ cb-&gt;nlh = nlh;
+ cb-&gt;data = control-&gt;data;
+ cb-&gt;module = control-&gt;module;
+ cb-&gt;min_dump_alloc = control-&gt;min_dump_alloc;
+ cb-&gt;skb = skb;
+
+ nlk-&gt;cb_running = true;
+
+ mutex_unlock(nlk-&gt;cb_mutex);
+
+ ret = netlink_dump(sk);
+</code></pre>
+
+    <p>找着出去的socket,构建个cb,传入netlink_dump(), 上面的control就是1中的c</p>
+
+    <pre><code> skb = netlink_alloc_skb(sk, alloc_size, nlk-&gt;portid, GFP_KERNEL);
+ if (!skb)
+         goto errout_skb;
+ netlink_skb_set_owner_r(skb, sk);
+
+ len = cb-&gt;dump(skb, cb);
+
+ if (len &gt; 0) {
+         mutex_unlock(nlk-&gt;cb_mutex);
+
+         if (sk_filter(sk, skb))
+                 kfree_skb(skb);
+         else
+                 __netlink_sendskb(sk, skb);
+         return 0;
+ }
+</code></pre>
+  </li>
+</ol>
+
+<p>netlink_dump()中，　重新生成skb, 并与外面的sock绑定, 再调用cb-&gt;dump(即c中的dumpit),最后调用__netlink_sendskb()，回到netlink的框架了</p>
+
+<p>先写到这rtnl_newlink()与rtnl_dump_all()改天另作分析，　其中前者中就调用了rtnl_link_ops-&gt;net_link();</p>
+
+    
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/linux%20kernel/2014/04/04/netlink-architecture" title="netlink框架">&larr; Previous</a></li>
+      
+        <li><a href="/pages/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/linux%20kernel/2014/04/05/vxlan-implementation" title="vxlan的内核实现">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'lxin'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+  </div>
+
+  <div class="span3 pull-right">
+    <ul class="nav nav-list">
+      <li class="nav-header">分类</li>
+      
+       
+        
+        <li>
+        
+        <a href="/pages/categories.html#linux tool-ref">linux tool <span>3</span></a>
+        </li>
+       
+        
+        <li class="active">
+        
+        <a href="/pages/categories.html#linux kernel-ref">linux kernel <span>5</span></a>
+        </li>
+      
+      
+        <li class="nav-header">Tags</li>
+        
+        
+
+
+  
+     
+    	<li><a href="/pages/tags.html#kernel-ref">kernel <span>5</span></a></li>
+    
+  
+
+
+
+      
+    </ul>
+  </div>
+</div>
+
+<!-- Gplus -->
+<script type="text/javascript">
+  window.___gcfg = {lang: 'zh-CN'};
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+
+
+      </div>
+
+      <footer>
+        <p>&copy; Xin Long 2014 
+          with help from Jijing Huang
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+    <script type="text/javascript" src="/assets/js/sd.js"></script>
+  </body>
+</html>
+
