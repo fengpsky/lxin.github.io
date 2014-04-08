@@ -159,6 +159,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
         vxlan->dst_port = nla_get_be16(data[IFLA_VXLAN_PORT]);
 
 3. 并且会通过vxlan_find_vni(net, vni, vxlan->dst_port)对vni进行duplicate检测
+
 4. 调用vxlan_fdb_create()创建条转发项
 
         err = vxlan_fdb_create(vxlan, all_zeros_mac,
@@ -171,7 +172,7 @@ vxlan_setup()中，为net_device设置了ops, 以及初始化fdb, 还有三个�
                                NTF_SELF);
 
 
-5.注册net_device,同时在register_netdevice时利用ndo_init  queue_work(vxlan_wq, &vxlan->sock_work);触发vxlan_sock_work(). 此时就能用ifconfig 看到设备了,并再添加进行vxlan_net中。
+5. 注册net_device,同时在register_netdevice时利用ndo_init  queue_work(vxlan_wq, &vxlan->sock_work);触发vxlan_sock_work(). 此时就能用ifconfig 看到设备了,并再添加进行vxlan_net中。
 
 #### 创建vxlan_socket
 
