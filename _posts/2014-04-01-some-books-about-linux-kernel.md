@@ -32,7 +32,7 @@ tags: "kernel"
     一本现在看来不怎么样的书，但在一开始通过它看到了整个协议栈的框架, 其实ppp协议讲得还是挺不错的
 
 #### 7.Understanding Linux Network Internals --Christian Benvenuti
-　
+
     内核网络经典，ipv4/bridge/neigh/route讲得很好
 
 #### 8.linux内核源码剖析－tcp/ip实现 --樊东东,莫澜
