@@ -7,7 +7,7 @@ tags: "autotest"
 --- 
 {% include JB/setup %}
 
-1.内核态绕过协议栈发包
+### 1.内核态绕过协议栈发包
 
     #include <linux/module.h>
     #include <linux/kernel.h>
@@ -141,7 +141,7 @@ tags: "autotest"
     module_init(init);
     module_exit(fini);
 
-2.kprobe 内核调试通用模板
+### 2.kprobe 内核调试通用模板
 
     #include <linux/module.h>
     #include <linux/kernel.h>
@@ -194,7 +194,7 @@ tags: "autotest"
     MODULE_AUTHOR("LUCIEN"); 
     MODULE_LICENSE("GPL");
 
-3. netfilter 调用
+### 3.netfilter 调用
 
     #include <linux/module.h>
     #include <linux/kernel.h>
