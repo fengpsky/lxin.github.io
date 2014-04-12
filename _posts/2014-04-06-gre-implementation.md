@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "vxlan的内核实现"
+title: "gre/gretap的内核实现"
 category: linux kernel
 excerpt: "about linux vxlan"
 tags: "kernel"
