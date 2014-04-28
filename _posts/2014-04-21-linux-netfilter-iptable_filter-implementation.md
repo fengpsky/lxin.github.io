@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "linux netfilter iptable_filter implementation (xt_table frame)"
+title: "linux netfilter iptable_filter (xt_table)"
 category: linux kernel
 excerpt: linux netfilter中比较简单的一个表的实现
 tags: [kernel]

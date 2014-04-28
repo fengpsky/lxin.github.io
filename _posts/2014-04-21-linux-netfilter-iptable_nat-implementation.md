@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "linux netfilter iptable_nat implementation (nf_conntrack)"
+title: "linux netfilter iptable_nat (nf_conntrack)"
 category: linux kernel
 excerpt: linux netfilter中nat转发的实现
 tags: [kernel]
