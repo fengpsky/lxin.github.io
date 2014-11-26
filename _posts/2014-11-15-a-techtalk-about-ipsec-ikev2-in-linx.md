@@ -7,7 +7,7 @@ tags: [vpn, ipsec, vpn]
 ---
 {% include JB/setup %}
 
-[vpn.pdf](http://lxin.org/assets/tar/netsched.pdf)
+[vpn.pdf](http://lxin.org/assets/tar/vpn.pdf)
 
 ##topic
         *vpn categories
