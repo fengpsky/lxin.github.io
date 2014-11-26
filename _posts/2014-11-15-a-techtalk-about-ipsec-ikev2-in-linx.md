@@ -40,6 +40,7 @@ tags: [vpn, ipsec, vpn]
                 6. Compromised key
                 7. Man-in-the-Middle
         *ikev1 vs ikev2 vs ikev3
+
 ##ike with ipv4&nat-t/xauth/addr-pool
 ###client ipsec.conf
 
