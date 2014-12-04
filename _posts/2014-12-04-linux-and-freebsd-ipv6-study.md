@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "linux and freebsd ipv6"
+title: "linux and freebsd ipv6 implementation"
 category: linux kernel
 excerpt: "ipv6 network protocol stack"
 tags: "kernel"
 ---
 {% include JB/setup %}
-I has tested ipv6 network protocol stack for one year since I joined redhat. I'd like to write some thing or tech-talk about it as a share.  but I cannot, because I'm afaid to waste people's time to listen or to read. those things I will be able to talk can be found on internet. no mather whether in my blog or tech-talk, the only thing I want to share is what we can not seach from internet. I think that is valuable.
+I has tested ipv6 network protocol stack for one year since I joined redhat. I'd like to write some thing or tech-talk about it as a share.  but I cannot, because I'm afaid to waste people's time to listen or to read,  those things I will be able to talk can be found on internet. no mather whether in my blog or tech-talk, the only thing I want to share is what we can not seach from internet. I think that is valuable.
 
 ##some import rfc:
 
@@ -36,4 +36,5 @@ I has tested ipv6 network protocol stack for one year since I joined redhat. I'd
 they all talk about KAME project, which is a project implemented in bsd system. linux trace KAME to achieve itself's ipv6 protocol
 
 [kame1.pdf](http://lxin.org/assets/tar/kame1.pdf)
+
 [kame2.pdf](http://lxin.org/assets/tar/kame2.pdf)
